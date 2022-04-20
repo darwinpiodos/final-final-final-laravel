@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-
 class UserController extends Controller
 {
     function register(Request $req)
@@ -36,15 +35,28 @@ class UserController extends Controller
         ]);
     }
 
+
+
+
+
     function login(Request $req)
     {
-        $user= User::where('email',$req->email)->first();
-        if(!$user || !Hash::check($req->password,$user->password))
-        {
-            return response()->json(["error"=>"Email or password is not matched"],400);;
-        }
-        return response()->json(["user"=> $user],200);;
-    } 
+            $user=User::where('email', $req -> email)->first();
+            if(! $user || ! Hash::check($req->password, $user->password))
+            {
+
+                return "Wrong Credentials";
+            }
+            else{
+                return $user;
+            }
+         
+    }
+
+
+    
+
+
 
 
     
