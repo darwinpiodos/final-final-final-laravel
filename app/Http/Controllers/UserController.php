@@ -45,7 +45,16 @@ class UserController extends Controller
                 return "Wrong Credentials";
             }
             else{
-                return $user;
+                if(!$user)
+                {
+                    return response()->json([
+                        'status'=>404,
+                        'message'=> 'sorry',
+                    ]);
+                }
+                else{
+                    return $user;
+                }
             }
          
     }
