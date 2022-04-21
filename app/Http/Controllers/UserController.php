@@ -29,10 +29,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return response() -> json([
-            'status'=>200,
-            'message'=>'User Added Successfully',
-        ]);
+        return $user;
     }
 
 
