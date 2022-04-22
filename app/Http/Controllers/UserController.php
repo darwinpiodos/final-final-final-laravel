@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    // start adding class here
+
+    // register
     function register(Request $req)
     {
         $user= new User;
@@ -33,46 +37,43 @@ class UserController extends Controller
     }
 
 
-
-
-
+    // login
     function login(Request $req)
     {
-            $user=User::where('email', $req -> email)->first();
-            if(! $user || ! Hash::check($req->password, $user->password))
-            {
+        $user=User::where('email', $req -> email)->first();
+        if(! $user || ! Hash::check($req->password, $user->password))
+        {
 
-                return "Wrong Credentials";
+            return "Wrong Credentials";
+        }
+        
+        else
+        {
+            if(!$user)
+            {
+                return response()->json([
+                    'status'=>404,
+                    'message'=> 'sorry',
+                ]);
             }
-            else{
-                if(!$user)
-                {
-                    return response()->json([
-                        'status'=>404,
-                        'message'=> 'sorry',
-                    ]);
-                }
-                else{
-                    return $user;
-                }
+
+            else
+            {
+                return $user;
             }
+        }
          
     }
 
 
-    
-
-
-
-
-    
+    // user list
     function list()
     {
-
         return User::all();
     }
 
 
+    // delete method
     function delete($id)
     {
         $result = User::where('id', $id)->delete();
@@ -83,10 +84,11 @@ class UserController extends Controller
         else{
             return ["result " => "Operation Failed"];
         } 
+
     }
 
 
-
+    // edit 
     function edit($id)
     {
         $user = User::find($id);
@@ -98,29 +100,26 @@ class UserController extends Controller
     }
 
 
+    // profile page
+    function profile($id)
+    {
+        $user = User::find($id);
+
+        return response()-> json([
+            'status'=>200,
+            'student'=>$user
+        ]);
+
+    }
 
 
-        function profile($id)
+    // update class
+    function update(Request $req, $id)
+    {
+        $user= User::find($id);
+
+        if($user)
         {
-            $user = User::find($id);
-
-            return response()-> json([
-                'status'=>200,
-                'student'=>$user
-            ]);
-        }
-
-
-
-
-        
-
-        function update(Request $req, $id)
-        {
- 
-        
-            $user= User::find($id);
-            if($user){
             $user->firstname=$req->input('firstname');
             $user->lastname=$req->input('lastname');
             $user->middlename=$req->input('middlename');
@@ -135,21 +134,17 @@ class UserController extends Controller
             $user->update();
         
                 
-                return response()->json(
-                    [
-                        'status'=> 200,
-                        'message' => "Profile Updated Successfully",
-                    ]
-                    );
+            return response()->json([
+                'status'=> 200,
+                'message' => "Profile Updated Successfully",
+                ]);
                     
-                }
+        }
                 
          
-}
+    }
 
 
 
-
-
-    
+    // end of class here
 }
